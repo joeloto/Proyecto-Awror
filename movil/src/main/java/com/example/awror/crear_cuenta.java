@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,11 @@ public class crear_cuenta extends AppCompatActivity {
 
     Button btnCuenta;
     Button btnCrear;
+    ApiRest api;
+    EditText txtNombre;
+    EditText txtApellido;
+    EditText txtCorreo;
+    EditText txtPassw;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +34,11 @@ public class crear_cuenta extends AppCompatActivity {
 
         btnCrear = findViewById(R.id.btnCrear);
         btnCuenta = findViewById(R.id.btnCuenta);
+        txtNombre = findViewById(R.id.txtNombre);
+        txtApellido = findViewById(R.id.txtApellido);
+        txtCorreo = findViewById(R.id.txtCorreo);
+        txtPassw = findViewById(R.id.txtPassw);
+        api = new ApiRest();
 
         btnCuenta.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,7 +51,8 @@ public class crear_cuenta extends AppCompatActivity {
         btnCrear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(crear_cuenta.this, cuenta_creada.class);
+
+                Intent i = new Intent(crear_cuenta.this, principal.class);
                 startActivity(i);
             }
         });
