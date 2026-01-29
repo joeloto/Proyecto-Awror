@@ -1,10 +1,12 @@
 package com.example.awror;
 
-import android.content.Intent;
 import android.os.Bundle;
+<<<<<<< HEAD
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+=======
+>>>>>>> 4828f2f50272f2b8459f3ab68eed1074009fb916
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class crear_cuenta extends AppCompatActivity {
 
+<<<<<<< HEAD
     Button btnCuenta;
     Button btnCrear;
     ApiRest api;
@@ -21,6 +24,8 @@ public class crear_cuenta extends AppCompatActivity {
     EditText txtApellido;
     EditText txtCorreo;
     EditText txtPassw;
+=======
+>>>>>>> 4828f2f50272f2b8459f3ab68eed1074009fb916
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +36,7 @@ public class crear_cuenta extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+<<<<<<< HEAD
 
         btnCrear = findViewById(R.id.btnCrear);
         btnCuenta = findViewById(R.id.btnCuenta);
@@ -58,5 +64,7 @@ public class crear_cuenta extends AppCompatActivity {
         });
 
 
+=======
+>>>>>>> 4828f2f50272f2b8459f3ab68eed1074009fb916
     }
 }
