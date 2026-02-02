@@ -14,11 +14,12 @@ public class ApiRest {
 
     public void subirUsuario(String user_name, String real_name, String real_surname, String email, String password){
         new Thread(()->{
+            HttpURLConnection con = null;
             try {
-                URL url = new URL("http://192.130.0.7:8080/apiawror/rest/deportistas/android");
-                HttpURLConnection con = (HttpURLConnection) url.openConnection(); //abrir conexion
+                URL url = new URL("http://192.130.0.7:8080/apiawror/rest/users");
+                con = (HttpURLConnection) url.openConnection(); //abrir conexion
                 con.setRequestMethod("POST");
-                con.setRequestProperty("Content-Type","application/json");
+                con.setRequestProperty("Content-Type","application/json; charset=UTF-8");
                 con.setDoOutput(true); //voy a escribir en el body
 
                 JSONObject json = new JSONObject();
@@ -32,14 +33,18 @@ public class ApiRest {
                 try (OutputStream os = con.getOutputStream()){
                     os.write(json.toString().getBytes(StandardCharsets.UTF_8));//enviar el body
                 } catch (IOException e) {
-
+                    throw new IOException(e);
                 }
 
                 int code = con.getResponseCode();//forzar envio
                 Log.i("CODIGO APIREST","EL CODIGO RESTANTE ES " + code);
 
             } catch (Exception e) {
-                throw new RuntimeException(e);
+               Log.e("APIREST","error");
+            } finally {
+                if (con != null) con.disconnect();
+
+
             }
         }).start();
     }
