@@ -3,8 +3,6 @@ package com.example.awror;
 public class Publicacion {
 
     public static final int TIPO_FOTO = 1;
-    public static final int TIPO_TEXTO = 2;
-
     private int tipo;
     private String usuario;
     private int likes;

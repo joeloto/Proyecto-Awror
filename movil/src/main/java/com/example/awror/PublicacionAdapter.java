@@ -33,17 +33,9 @@ public class PublicacionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        if (viewType == com.example.awror.Publicacion.TIPO_FOTO) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.publicacion, parent, false);
             return new FotoViewHolder(view);
-
-        } else {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.publicacion2, parent, false);
-            return new TextoViewHolder(view);
-        }
     }
 
     @Override
@@ -54,8 +46,8 @@ public class PublicacionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (holder.getClass() == FotoViewHolder.class) {
             FotoViewHolder vh = (FotoViewHolder) holder;
             vh.tvUsuario.setText(p.getUsuario());
-            vh.tvLikes.setText(p.getLikes());
-            vh.tvComentarios.setText(p.getComentarios());
+            vh.tvLikes.setText(String.valueOf(p.getLikes()));
+            vh.tvComentarios.setText(String.valueOf(p.getComentarios()));
             vh.imgPublicacion.setImageResource(p.getImagen());
 
         } else if (holder.getClass() == TextoViewHolder.class) {
@@ -70,6 +62,11 @@ public class PublicacionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public int getItemCount() {
         return listaPublicaciones.size();
+    }
+
+    public void publicar(Publicacion p){
+        listaPublicaciones.add(p);
+        notifyItemInserted(listaPublicaciones.size()-1);
     }
 
     static class FotoViewHolder extends RecyclerView.ViewHolder {
@@ -98,7 +95,6 @@ public class PublicacionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public TextoViewHolder(@NonNull View itemView) {
             super(itemView);
             tvUsuario = itemView.findViewById(R.id.tvUsuario);
-            tvTexto = itemView.findViewById(R.id.tvTextoPublicacion);
             tvLikes = itemView.findViewById(R.id.tvLikes);
             tvComentarios = itemView.findViewById(R.id.tvComentarios);
         }

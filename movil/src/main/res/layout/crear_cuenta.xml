@@ -33,8 +33,7 @@
         android:id="@+id/btnCrear"
         android:layout_width="160dp"
         android:layout_height="108dp"
-        android:layout_marginTop="42dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="35dp"
         android:background="@drawable/hueso"
         android:backgroundTint="#FFFFFF"
         android:fontFamily="@font/abril_fatface"
@@ -43,15 +42,14 @@
         app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnCuenta"
-        app:layout_constraintTop_toBottomOf="@+id/txtUsuario" />
+        app:layout_constraintStart_toEndOf="@+id/btnCuenta" />
 
     <Button
         android:id="@+id/btnCuenta"
         android:layout_width="160dp"
         android:layout_height="108dp"
-        android:layout_marginTop="42dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="35dp"
         android:background="@drawable/hueso"
         android:backgroundTint="#E00D0D"
         android:fontFamily="@font/abril_fatface"
@@ -59,11 +57,8 @@
         android:textColor="#000000"
         app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.119"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtUsuario"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintEnd_toStartOf="@+id/btnCrear"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/txtPassw"
@@ -86,7 +81,6 @@
         android:layout_marginTop="2dp"
         android:background="@drawable/edittext_background"
         android:ems="10"
-        android:inputType="text|textPassword"
         android:textColor="#000000"
         android:textSize="11dp"
         android:textStyle="bold"
@@ -101,7 +95,7 @@
         android:layout_marginTop="1dp"
         android:background="@drawable/edittext_background"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="text|textEmailAddress"
         android:textColor="#000000"
         android:textSize="11dp"
         android:textStyle="bold"
@@ -169,7 +163,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="30dp"
         android:fontFamily="@font/abril_fatface"
         android:shadowColor="#000000"
         android:shadowDx="2"

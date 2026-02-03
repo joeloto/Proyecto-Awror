@@ -70,7 +70,7 @@
         android:layout_marginBottom="28dp"
         android:background="@drawable/edittext_background"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="text|textEmailAddress"
         android:textColor="#6191DD"
         android:textSize="11dp"
         android:textStyle="bold"
