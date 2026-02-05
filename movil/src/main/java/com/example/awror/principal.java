@@ -1,5 +1,6 @@
 package com.example.awror;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -48,8 +49,16 @@ public class principal extends AppCompatActivity {
                 return true;
             }
             else if (id == R.id.principal) {
-                adapter.publicar(new Publicacion("", 0, 0, "", 0));
+                //adapter.publicar(new Publicacion("", 0, 0, "", 0));
                 return true;
+            }
+            else if (id == R.id.perfil){
+                Intent i = new Intent(principal.this,perfil.class);
+
+                startActivity(i);
+            }
+            else {
+
             }
             return false;
         });

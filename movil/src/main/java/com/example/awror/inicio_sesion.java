@@ -16,8 +16,9 @@ public class inicio_sesion extends AppCompatActivity {
 
     Button btnEntrar;
     Button btnNoCuenta;
-    EditText txtCorreo;
+    EditText txtUser;
     EditText txtPassw;
+    ApiRest api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +32,15 @@ public class inicio_sesion extends AppCompatActivity {
         });
 
         btnEntrar = findViewById(R.id.btnEntrar);
-        txtCorreo = findViewById(R.id.txtCorreo);
+        txtUser = findViewById(R.id.txtCo);
         txtPassw = findViewById(R.id.txtPassw);
         btnNoCuenta = findViewById(R.id.btnNoCuenta);
+        api = new ApiRest();
 
         btnEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                api.loginUser(txtUser.getText().toString(),txtPassw.getText().toString());
                 Intent i = new Intent(inicio_sesion.this, principal.class);
                 startActivity(i);
             }

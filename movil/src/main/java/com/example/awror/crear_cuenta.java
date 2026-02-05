@@ -37,7 +37,7 @@ public class crear_cuenta extends AppCompatActivity {
         btnCuenta = findViewById(R.id.btnCuenta);
         txtNombre = findViewById(R.id.txtNombre);
         txtApellido = findViewById(R.id.txtApellido);
-        txtCorreo = findViewById(R.id.txtCorreo);
+        txtCorreo = findViewById(R.id.txtCo);
         txtPassw = findViewById(R.id.txtPassw);
         txtUsuario = findViewById(R.id.txtUsuario);
         api = new ApiRest();
@@ -63,7 +63,5 @@ public class crear_cuenta extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-
     }
 }

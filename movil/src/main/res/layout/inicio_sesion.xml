@@ -63,7 +63,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <EditText
-        android:id="@+id/txtCorreo"
+        android:id="@+id/txtCo"
         android:layout_width="213dp"
         android:layout_height="35dp"
         android:layout_marginTop="6dp"
@@ -118,7 +118,7 @@
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/txtCorreo"
+        app:layout_constraintBottom_toTopOf="@+id/txtCo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -141,7 +141,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.292"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtCorreo" />
+        app:layout_constraintTop_toBottomOf="@+id/txtCo" />
 
     <TextView
         android:id="@+id/textView4"
@@ -154,10 +154,10 @@
         android:shadowDx="2"
         android:shadowDy="2"
         android:shadowRadius="4"
-        android:text="Correo"
+        android:text="Usuario"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/txtCorreo"
+        app:layout_constraintBottom_toTopOf="@+id/txtCo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.269"
         app:layout_constraintStart_toStartOf="parent"

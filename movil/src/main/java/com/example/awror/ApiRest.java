@@ -48,4 +48,8 @@ public class ApiRest {
             }
         }).start();
     }
+
+    public void loginUser(String user_name,String password){
+
+    }
 }

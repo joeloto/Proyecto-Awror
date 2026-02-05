@@ -3,11 +3,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -20,12 +22,11 @@ public class UserHandler {
 
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
-    public Response subirDeportistasAndroid(User user) throws ClassNotFoundException {
+    public Response UserUp(User user) throws ClassNotFoundException {
         Class.forName("org.mariadb.jdbc.Driver");
         try {
             Connection conexion = DriverManager.getConnection(URL, USER, PASS);
             Statement st = conexion.createStatement();
-          
             st.executeUpdate("insert into users (user_name,real_name,real_surname,email,password) values ('" + user.getUser_name() + "','" + user.getReal_name() + "','" + user.getReal_surname() + "','" + user.getEmail() + "','" + user.getPassword() + "')");
             return Response.ok("Subido correctamente").build();
 
@@ -33,4 +34,22 @@ public class UserHandler {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error").build();
         }
     }
+
+    @GET
+    @Path("login/{usuario}/{password}")
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Response loginuser(@PathParam("usuario") String usuario, @PathParam("password") String password) throws ClassNotFoundException {
+        Class.forName("org.mariadb.jdbc.Driver");
+        try {
+            Connection conexion = DriverManager.getConnection(URL, USER, PASS);
+            Statement st = conexion.createStatement();
+            st.executeUpdate("select * from users where user_name='" + usuario + "' and password='" + password + "'");
+            return Response.ok("Sesión iniciada").build();
+
+        } catch (SQLException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error").build();
+        }
+    }
+
+
 }
