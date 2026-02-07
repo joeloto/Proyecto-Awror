@@ -1,43 +1,168 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear cuenta</title>
-    <style>
-        body {
-            background-image: url('https://images.alphacoders.com/130/1307447.jpg');
-            background-size: cover;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crear Cuenta - AWROR</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-        input {
-            width: 450px;
-            height: 50px;
-            border-radius: 10px;
-            font-size: 20px;
-        }
+    body, html {
+        height: 100%;
+        font-family: 'Montserrat', sans-serif;
+    }
 
-        section{
-            display: flex;
-            align-content: center;
-            justify-content: center;
-        }
-    </style>
+    .container {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .left-column {
+        flex: 1;
+        background: url('https://www.infobae.com/new-resizer/AN9yqvBxbSsBDmcl_bAAV5KBzTY=/arc-anglerfish-arc2-prod-infobae/public/TJMNI2MPI5DCNH6IO45PAMBFEQ.jpg') center/cover no-repeat;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    .left-column .text {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        color: #fff;
+        padding: 20px;
+    }
+
+    .left-column h2 {
+        font-size: 32px;
+        margin-bottom: 15px;
+    }
+
+    .left-column p {
+        font-size: 18px;
+        line-height: 1.5;
+    }
+
+    .right-column {
+        flex: 1;
+        background-color: #fff8e1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 50px 40px;
+    }
+
+    .right-column .logo {
+        width: 150px;
+        margin-bottom: 20px;
+    }
+
+    .right-column h2 {
+        color: #8B4513;
+        margin-bottom: 10px;
+        font-size: 24px;
+    }
+
+    .right-column p {
+        color: #A0522D;
+        margin-bottom: 30px;
+        font-size: 14px;
+    }
+
+    .form-group {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .form-group input {
+        width: 500px;
+        padding: 14px 15px;
+        border-radius: 12px;
+        border: 1px solid #D2B48C;
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+
+    .form-group input:focus {
+        border-color: #DAA520;
+        box-shadow: 0 0 8px rgba(218,165,32,0.5);
+        outline: none;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+        background-color: #DAA520; 
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background-color: #B8860B;
+    }
+
+    .right-column a {
+        display: block;
+        margin-top: 15px;
+        font-size: 14px;
+        text-decoration: none;
+        color: #8B4513;
+    }
+
+    .right-column a:hover {
+        color: #B8860B;
+    }
+</style>
 </head>
-
 <body>
-    <div>
-        <section>
-            <form action="#">
-                <input type="text" name="nombre" id="nombre" placeholder="Nombre"><br><br>
-                <input type="text" name="apellidos" id="apellidos" placeholder="Apellidos"><br><br>
-                <input type="text" name="email" id="email" placeholder="Email"><br><br>
-                <input type="text" name="password" id="password" placeholder="Contraseña"><br><br>
-                <input type="text" name="usuario" id="usuario" placeholder="Nombre de usuario"><br><br>
-            </form>
-        </section>
-    </div>
-</body>
 
+<div class="container">
+    <div class="left-column">
+        <div class="text">
+            <h2>La aplicación ideal de mascotas</h2>
+            <p>Comparte momentos inolvidables con tus queridos compañeros</p>
+        </div>
+    </div>
+
+    <div class="right-column">
+        <img src="awrorlogo.png" class="logo" alt="Logo">
+        <h2>Crear cuenta en AWROR</h2>
+        <p>Conviértete en awrorer</p>
+
+        <form action="#" method="post">
+            <div class="form-group">
+                <input type="text" name="real_name" placeholder="Nombre" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="real_surname" placeholder="Apellido" required>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Correo electrónico" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Contraseña" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="user_name" placeholder="Nombre de usuario" required>
+            </div>
+            <button type="submit">Crear cuenta</button>
+        </form>
+        <a href="iniciosesion.php">¿Ya tienes cuenta? Inicia sesión</a>
+    </div>
+</div>
+
+</body>
 </html>
