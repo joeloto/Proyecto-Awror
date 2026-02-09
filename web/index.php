@@ -32,8 +32,8 @@
             <form action="#">
                 <input type="text" name="nombre" id="nombre" placeholder="Nombre"><br><br>
                 <input type="text" name="apellidos" id="apellidos" placeholder="Apellidos"><br><br>
-                <input type="text" name="email" id="email" placeholder="Email"><br><br>
-                <input type="text" name="password" id="password" placeholder="Contraseña"><br><br>
+                <input type="email" name="email" id="email" placeholder="Email"><br><br>
+                <input type="password" name="password" id="password" placeholder="Contraseña"><br><br>
                 <input type="text" name="usuario" id="usuario" placeholder="Nombre de usuario"><br><br>
             </form>
         </section>
