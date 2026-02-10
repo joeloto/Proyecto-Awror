@@ -38,15 +38,16 @@
         text-align: center;
         color: #fff;
         padding: 20px;
+        text-shadow: -1px -1px 0 black,-1px -1px 0 black,-1px -1px 0 black,-1px -1px 0 black;
     }
 
-    .columnaIzquierda h2 {
+    .columnaIzquierda h1 {
         font-size: 32px;
         margin-bottom: 15px;
     }
 
     .columnaIzquierda p {
-        font-size: 18px;
+        font-size: 25px;
         line-height: 1.5;
     }
 
@@ -61,8 +62,7 @@
     }
 
     .columnaDerecha .logo {
-        width: 150px;
-        margin-bottom: 20px;
+        width: 200px;
     }
 
     .columnaDerecha h2 {
@@ -125,13 +125,14 @@
     .columnaDerecha a:hover {
         color: #B8860B;
     }
+
 </style>
 </head>
 <body>
 <div class="container">
     <div class="columnaIzquierda">
         <div class="text">
-            <h2>La aplicación ideal de mascotas</h2>
+            <h1>La aplicación ideal de mascotas</h1>
             <p>Comparte momentos inolvidables con tus queridos compañeros</p>
         </div>
     </div>
@@ -159,7 +160,7 @@
             </div>
             <button type="submit">Crear cuenta</button>
         </form>
-        <a href="iniciosesion.php">¿Ya tienes cuenta? Inicia sesión</a>
+        <a href="../iniciosesion.php">¿Ya tienes cuenta? Inicia sesión</a>
     </div>
 </div>
 

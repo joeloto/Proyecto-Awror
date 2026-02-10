@@ -99,23 +99,23 @@
             <input type="password" name="password" placeholder="Contraseña" required>
             <button type="submit">Acceder</button>
         </form>
-        <a href="index.php">¿No tienes cuenta? Crear cuenta</a>
+        <a href="./vistas/crearcuenta.php">¿No tienes cuenta? Crear cuenta</a>
     </div>
 
     <script>
-        const backgrounds = [
+        const fondos = [
             'https://images.alphacoders.com/130/1307447.jpg',
             'https://wallpapers.com/images/featured/animales-bebes-wmsvikfmzvhh3aot.jpg',
         ];
 
-        let current = 0;
+        let actual = 0;
 
         function changeBackground() {
-            current = (current + 1) % backgrounds.length;
-            document.body.style.backgroundImage = `url('${backgrounds[current]}')`;
+            actual = (actual + 1) % fondos.length;
+            document.body.style.backgroundImage = `url('${fondos[actual]}')`;
         }
 
-        document.body.style.backgroundImage = `url('${backgrounds[0]}')`;
+        document.body.style.backgroundImage = `url('${fondos[0]}')`;
 
         setInterval(changeBackground, 5000);
     </script>
