@@ -23,7 +23,7 @@
         height: 100vh;
     }
 
-    .left-column {
+    .columnaIzquierda {
         flex: 1;
         background: url('https://www.infobae.com/new-resizer/AN9yqvBxbSsBDmcl_bAAV5KBzTY=/arc-anglerfish-arc2-prod-infobae/public/TJMNI2MPI5DCNH6IO45PAMBFEQ.jpg') center/cover no-repeat;
         display: flex;
@@ -32,7 +32,7 @@
         position: relative;
     }
 
-    .left-column .text {
+    .columnaIzquierda .text {
         position: relative;
         z-index: 1;
         text-align: center;
@@ -40,17 +40,17 @@
         padding: 20px;
     }
 
-    .left-column h2 {
+    .columnaIzquierda h2 {
         font-size: 32px;
         margin-bottom: 15px;
     }
 
-    .left-column p {
+    .columnaIzquierda p {
         font-size: 18px;
         line-height: 1.5;
     }
 
-    .right-column {
+    .columnaDerecha {
         flex: 1;
         background-color: #fff8e1;
         display: flex;
@@ -60,29 +60,29 @@
         padding: 50px 40px;
     }
 
-    .right-column .logo {
+    .columnaDerecha .logo {
         width: 150px;
         margin-bottom: 20px;
     }
 
-    .right-column h2 {
+    .columnaDerecha h2 {
         color: #8B4513;
         margin-bottom: 10px;
         font-size: 24px;
     }
 
-    .right-column p {
+    .columnaDerecha p {
         color: #A0522D;
         margin-bottom: 30px;
         font-size: 14px;
     }
 
-    .form-group {
+    .formulario {
         width: 100%;
         margin-bottom: 15px;
     }
 
-    .form-group input {
+    .formulario input {
         width: 500px;
         padding: 14px 15px;
         border-radius: 12px;
@@ -91,7 +91,7 @@
         transition: all 0.3s;
     }
 
-    .form-group input:focus {
+    .formulario input:focus {
         border-color: #DAA520;
         box-shadow: 0 0 8px rgba(218,165,32,0.5);
         outline: none;
@@ -114,7 +114,7 @@
         background-color: #B8860B;
     }
 
-    .right-column a {
+    .columnaDerecha a {
         display: block;
         margin-top: 15px;
         font-size: 14px;
@@ -122,39 +122,39 @@
         color: #8B4513;
     }
 
-    .right-column a:hover {
+    .columnaDerecha a:hover {
         color: #B8860B;
     }
 </style>
 </head>
 <body>
 <div class="container">
-    <div class="left-column">
+    <div class="columnaIzquierda">
         <div class="text">
             <h2>La aplicación ideal de mascotas</h2>
             <p>Comparte momentos inolvidables con tus queridos compañeros</p>
         </div>
     </div>
 
-    <div class="right-column">
+    <div class="columnaDerecha">
         <img src="awrorlogo.png" class="logo" alt="Logo">
         <h2>Crear cuenta en AWROR</h2>
         <p>Conviértete en awrorer</p>
 
         <form action="#" method="post">
-            <div class="form-group">
+            <div class="formulario">
                 <input type="text" name="real_name" placeholder="Nombre" required>
             </div>
-            <div class="form-group">
+            <div class="formulario">
                 <input type="text" name="real_surname" placeholder="Apellido" required>
             </div>
-            <div class="form-group">
+            <div class="formulario">
                 <input type="email" name="email" placeholder="Correo electrónico" required>
             </div>
-            <div class="form-group">
+            <div class="formulario">
                 <input type="password" name="password" placeholder="Contraseña" required>
             </div>
-            <div class="form-group">
+            <div class="formulario">
                 <input type="text" name="user_name" placeholder="Nombre de usuario" required>
             </div>
             <button type="submit">Crear cuenta</button>

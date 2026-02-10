@@ -19,7 +19,7 @@
             margin: 0;
         }
 
-        .login-container {
+        .formulario {
             position: relative; 
             background-color: rgba(255, 248, 225, 0.75); 
             padding: 40px 30px;
@@ -29,7 +29,7 @@
             text-align: center;
         }
 
-        .login-container .logo {
+        .formulario .logo {
             position: absolute;
             top: 10px;
             left: 10px;
@@ -38,19 +38,19 @@
             border-radius: 5px;
         }
 
-        .login-container h1 {
+        .formulario h1 {
             color: #8B4513; 
             margin-bottom: 10px;
         }
 
-        .login-container p {
+        .formulario p {
             color: #A0522D; 
             margin-bottom: 30px;
             font-weight: bold;
         }
 
-        .login-container input[type="email"],
-        .login-container input[type="password"] {
+        .formulario input[type="email"],
+        .formulario input[type="password"] {
             width: 93%;
             padding: 12px;
             margin-bottom: 20px;
@@ -59,7 +59,7 @@
             font-size: 16px;
         }
 
-        .login-container button {
+        .formulario button {
             width: 100%;
             padding: 12px;
             background-color: #DAA520; 
@@ -71,25 +71,25 @@
             transition: background-color 0.3s ease;
         }
 
-        .login-container button:hover {
+        .formulario button:hover {
             background-color: #B8860B;
         }
 
-        .login-container a {
+        .formulario a {
             display: block;
             margin-top: 20px;
             color: #8B4513;
             text-decoration: none;
         }
 
-        .login-container a:hover {
+        .formulario a:hover {
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
-    <div class="login-container">
+    <div class="formulario">
         <img src="awrorlogo.png" alt="Logo" class="logo">
 
         <h1>Bienvenido a AWROR</h1>
