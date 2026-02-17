@@ -1,3 +1,29 @@
+<?php
+require_once '../modelos/modelo.php';
+
+$mensaje = '';
+if (
+    !empty($_POST['real_name']) &&
+    !empty($_POST['real_surname']) &&
+    !empty($_POST['email']) &&
+    !empty($_POST['password']) &&
+    !empty($_POST['user_name'])
+) {
+    $user = new User();
+
+    $rutaBD = null; 
+
+    $resultado = $user->setUsuario($_POST['real_name'], $_POST['real_surname'], $_POST['email'], $_POST['password'], $_POST['user_name'], $rutaBD);
+
+    if ($resultado) {
+        echo "<script>alert('Cuenta creada correctamente');</script>";
+    } else {
+        echo "<script>alert('No se ha podido crear la cuenta');</script>";
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -138,7 +164,7 @@
     </div>
 
     <div class="columnaDerecha">
-        <img src="awrorlogo.png" class="logo" alt="Logo">
+        <img src="../awrorlogo.png" class="logo" alt="Logo">
         <h2>Crear cuenta en AWROR</h2>
         <p>Conviértete en awrorer</p>
 

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AWROR</title>
+    <title>Perfil</title>
 
     <style>
         * {
@@ -66,29 +66,23 @@
         .tituloapp:hover {
             color: white;
             font-weight: bold;
-            font-size: 25px;
+            font-size: 18px;
         }
 
-        main {
+        .main {
             padding: 40px;
             display: flex;
             justify-content: center;
             overflow-y: auto;
         }
 
-        .publicacion {
+        .formulario {
             background-color: #242526;
             width: 600px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             padding: 20px;
             border: 1px solid #3a3b3c;
-        }
-
-        .cabecera {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
         }
 
         .fotoperfil {
@@ -104,18 +98,11 @@
             color: #e4e6eb;
         }
 
-        .contenidop {
+        .datos {
             margin: 15px 0;
             font-size: 15px;
             line-height: 1.5;
             color: #d0d2d6;
-        }
-
-        .imagen {
-            width: 100%;
-            height: 300px;
-            background-color: #3a3b3c;
-            border-radius: 10px;
         }
 
         .acciones {
@@ -124,17 +111,6 @@
             margin-top: 15px;
             padding-top: 10px;
             border-top: 1px solid #3a3b3c;
-        }
-
-        .boton-accion {
-            cursor: pointer;
-            color: #b0b3b8;
-            font-weight: 500;
-            transition: 0.2s;
-        }
-
-        .boton-accion:hover {
-            color: #f7c775;
         }
 
         .opciones {
@@ -149,7 +125,7 @@
             margin-bottom: 30px;
         }
 
-        .perfil .fotoperfil {
+        .perfil .foto-usuario {
             width: 50px;
             height: 50px;
         }
@@ -181,30 +157,18 @@
             background-color: #3a3b3c;
         }
 
-        .botonpublicar {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            width: 100px;
-            height: 60px;
-            border-radius: 10px;
-            border: none;
+        .boton-guardar {
             background-color: #f7c775;
             color: white;
-            font-size: 20px;
-            font-weight: bold;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            display: inline-block;
-            line-height: 60px;
-            text-align: center;
-            vertical-align:middle;
-            transition: background-color 0.3s, transform 0.2s;
+            transition: background-color 0.3s;
         }
 
-        .botonpublicar:hover {
-            background-color: #f9d38c;
-            transform: scale(1.1);
+        .boton-guardar:hover {
+            background-color: #ea9d55;
         }
     </style>
 </head>
@@ -219,25 +183,49 @@
                 AWROR
             </div>
         </header>
-        <main>
-            <div class="publicacion">
-                <div class="cabecera">
-                    <div class="fotoperfil"></div>
-                    <div>
-                        <div class="nombre-usuario">nombre_usuario</div>
+        <main class="main">
+            <div class="formulario">
+
+                <h2 style="margin-bottom:20px; color:#f7c775;">Datos del Perfil</h2>
+
+                <form action="../controladores/controlador_actualizar.php" method="POST">
+
+                    <div class="datos">
+                        <label for="real_name">Nombre:</label><br><br>
+                        <input type="text" id="real_name" name="real_name"
+                            style="width:100%; padding:10px; border-radius:8px; border:none;">
                     </div>
-                </div>
-                <div class="contenidop">
-                    AAAAAAA
-                </div>
-                <div class="imagen"></div>
-                <div class="acciones">
-                    <div class="boton-accion">Me gusta</div>
-                    <div class="boton-accion">Comentar</div>
-                    <div class="boton-accion">Compartir</div>
-                </div>
+                    <div class="datos">
+                        <label for="real_surname">Primer apellido:</label><br><br>
+                        <input type="text" id="real_surname" name="real_surname"
+                            style="width:100%; padding:10px; border-radius:8px; border:none;">
+                    </div>
+                    <div class="datos">
+                        <label for="email">Correo electrónico:</label><br><br>
+                        <input type="email" id="email" name="email"
+                            style="width:100%; padding:10px; border-radius:8px; border:none;">
+                    </div>
+                    <div class="datos">
+                        <label for="user_name">Nombre de usuario:</label><br><br>
+                        <input type="text" id="user_name" name="user_name"
+                            style="width:100%; padding:10px; border-radius:8px; border:none;">
+                    </div>
+                    <div class="datos">
+                        <label for="password">Contraseña:</label><br><br>
+                        <input type="password" id="password" name="password"
+                            style="width:100%; padding:10px; border-radius:8px; border:none;">
+                    </div>
+                    <div class="acciones">
+                        <button type="submit" class="boton-guardar">
+                            Guardar cambios
+                        </button>
+                    </div>
+
+                </form>
+
             </div>
         </main>
+
         <aside class="opciones">
             <div class="perfil">
                 <div class="fotoperfil"></div>
@@ -253,7 +241,6 @@
             </ul>
         </aside>
     </div>
-    <button class="botonpublicar">Publicar</button>
 </body>
 
 </html>

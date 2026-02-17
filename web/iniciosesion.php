@@ -94,7 +94,7 @@
 
         <h1>Bienvenido a AWROR</h1>
         <p>Inicia sesión en tu cuenta</p>
-        <form action="#" method="post">
+        <form action="./vistas/principal.php" method="post">
             <input type="email" name="email" placeholder="Correo electrónico" required >
             <input type="password" name="password" placeholder="Contraseña" required>
             <button type="submit">Acceder</button>
@@ -103,19 +103,19 @@
     </div>
 
     <script>
-        const fondos = [
+        const backgrounds = [
             'https://images.alphacoders.com/130/1307447.jpg',
             'https://wallpapers.com/images/featured/animales-bebes-wmsvikfmzvhh3aot.jpg',
         ];
 
-        let actual = 0;
+        let current = 0;
 
         function changeBackground() {
-            actual = (actual + 1) % fondos.length;
-            document.body.style.backgroundImage = `url('${fondos[actual]}')`;
+            current = (current + 1) % backgrounds.length;
+            document.body.style.backgroundImage = `url('${backgrounds[current]}')`;
         }
 
-        document.body.style.backgroundImage = `url('${fondos[0]}')`;
+        document.body.style.backgroundImage = `url('${backgrounds[0]}')`;
 
         setInterval(changeBackground, 5000);
     </script>
