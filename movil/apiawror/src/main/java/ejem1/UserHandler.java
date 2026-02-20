@@ -3,6 +3,7 @@ package ejem1;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -49,15 +50,14 @@ public class UserHandler {
         Class.forName("org.mariadb.jdbc.Driver");
         try {
             Connection conexion = DriverManager.getConnection(URL, USER, PASS);
-            Statement st = conexion.createStatement();
-            ResultSet rs = st.executeQuery(
-                    "select * from users where user_name='" + usuario + "' and password='" + password + "'");
+            PreparedStatement ps = conexion.prepareStatement("SELECT * FROM users WHERE user_name = ? AND password = ?");
+            ps.setString(1, usuario);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return Response.ok("Sesión iniciada").build();
             } else {
-                return Response.status(Response.Status.UNAUTHORIZED)
-                        .entity("Usuario o contraseña incorrectos")
-                        .build();
+                return Response.status(Response.Status.UNAUTHORIZED).entity("Usuario o contraseña incorrectos").build();
             }
 
         } catch (SQLException e) {
