@@ -57,13 +57,14 @@
         }
 
 
-        .tituloapp {
+        .tituloapp a{
             color: #f7c775;
             font-weight: bold;
             font-size: 25px;
+            text-decoration: none;
         }
 
-        .tituloapp:hover {
+        .tituloapp a:hover {
             color: white;
             font-weight: bold;
             font-size: 25px;
@@ -79,10 +80,12 @@
         .publicacion {
             background-color: #242526;
             width: 600px;
+            height: 485px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             padding: 20px;
             border: 1px solid #3a3b3c;
+            /* display: none; */
         }
 
         .cabecera {
@@ -216,7 +219,7 @@
             <div class="logo"><a href="./principal.php"><img src="../awrorlogo.png" width="50px" height="50px"></a></div>
 
             <div class="tituloapp">
-                AWROR
+                <a href="./principal.php">AWROR</a>
             </div>
         </header>
         <main>

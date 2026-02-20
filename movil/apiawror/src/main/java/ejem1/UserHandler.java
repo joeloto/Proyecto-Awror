@@ -1,8 +1,12 @@
 package ejem1;
+
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -27,7 +31,9 @@ public class UserHandler {
         try {
             Connection conexion = DriverManager.getConnection(URL, USER, PASS);
             Statement st = conexion.createStatement();
-            st.executeUpdate("insert into users (user_name,real_name,real_surname,email,password) values ('" + user.getUser_name() + "','" + user.getReal_name() + "','" + user.getReal_surname() + "','" + user.getEmail() + "','" + user.getPassword() + "')");
+            st.executeUpdate("insert into users (user_name,real_name,real_surname,email,password,created) values ('"
+                    + user.getUser_name() + "','" + user.getReal_name() + "','" + user.getReal_surname() + "','"
+                    + user.getEmail() + "','" + user.getPassword() + "','" + LocalDate.now() + "')");
             return Response.ok("Subido correctamente").build();
 
         } catch (SQLException e) {
@@ -38,18 +44,25 @@ public class UserHandler {
     @GET
     @Path("login/{usuario}/{password}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public Response loginuser(@PathParam("usuario") String usuario, @PathParam("password") String password) throws ClassNotFoundException {
+    public Response loginuser(@PathParam("usuario") String usuario, @PathParam("password") String password)
+            throws ClassNotFoundException {
         Class.forName("org.mariadb.jdbc.Driver");
         try {
             Connection conexion = DriverManager.getConnection(URL, USER, PASS);
             Statement st = conexion.createStatement();
-            st.executeUpdate("select * from users where user_name='" + usuario + "' and password='" + password + "'");
-            return Response.ok("Sesión iniciada").build();
+            ResultSet rs = st.executeQuery(
+                    "select * from users where user_name='" + usuario + "' and password='" + password + "'");
+            if (rs.next()) {
+                return Response.ok("Sesión iniciada").build();
+            } else {
+                return Response.status(Response.Status.UNAUTHORIZED)
+                        .entity("Usuario o contraseña incorrectos")
+                        .build();
+            }
 
         } catch (SQLException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error").build();
         }
     }
-
 
 }

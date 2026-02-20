@@ -57,16 +57,17 @@
         }
 
 
-        .tituloapp {
+        .tituloapp a{
             color: #f7c775;
             font-weight: bold;
             font-size: 25px;
+            text-decoration: none;
         }
 
-        .tituloapp:hover {
+        .tituloapp a:hover {
             color: white;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 25px;
         }
 
         .main {
@@ -83,6 +84,7 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             padding: 20px;
             border: 1px solid #3a3b3c;
+            height: 660px;
         }
 
         .fotoperfil {
@@ -165,6 +167,9 @@
             border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
         }
 
         .boton-guardar:hover {
@@ -180,7 +185,7 @@
             <div class="logo"><a href="./principal.php"><img src="../awrorlogo.png" width="50px" height="50px"></a></div>
 
             <div class="tituloapp">
-                AWROR
+                <a href="./principal.php">AWROR</a>
             </div>
         </header>
         <main class="main">
