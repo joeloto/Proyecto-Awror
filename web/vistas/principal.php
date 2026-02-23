@@ -1,3 +1,59 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['id'])) {
+    header("Location: iniciosesion.php");
+    exit();
+}
+
+$usuario_id = $_SESSION['id'];
+$api = "http://localhost:8080/apiawror/rest/posts";
+
+/* -------- CREAR POST -------- */
+if (isset($_POST['publicar'])) {
+
+    $data = [
+        "user_id" => $usuario_id,
+        "contenido" => $_POST['contenido']
+    ];
+
+    $ch = curl_init($api);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json'
+    ]);
+    curl_exec($ch);
+    curl_close($ch);
+
+    header("Location: principal.php");
+    exit();
+}
+
+/* -------- ELIMINAR POST -------- */
+if (isset($_POST['eliminar'])) {
+
+    $post_id = $_POST['post_id'];
+
+    $ch = curl_init($api . "/" . $post_id);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_exec($ch);
+    curl_close($ch);
+
+    header("Location: principal.php");
+    exit();
+}
+
+/* -------- OBTENER POSTS -------- */
+$ch = curl_init($api . "/user/" . $usuario_id);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+curl_close($ch);
+
+$posts = json_decode($response, true);
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -57,7 +113,7 @@
         }
 
 
-        .tituloapp a{
+        .tituloapp a {
             color: #f7c775;
             font-weight: bold;
             font-size: 25px;
@@ -201,16 +257,42 @@
             display: inline-block;
             line-height: 60px;
             text-align: center;
-            vertical-align:middle;
+            vertical-align: middle;
             transition: background-color 0.3s, transform 0.2s;
         }
 
         .botonpublicar:hover {
-            background-color: #f9d38c;
+            background-color: #ea9d55;
             transform: scale(1.1);
+        }
+
+        .boton-eliminar {
+            background-color: #b02a37;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .boton-eliminar:hover {
+            background-color: #e03141;
+            transform: scale(1.05);
+        }
+
+        .boton-eliminar:active {
+            transform: scale(0.95);
         }
     </style>
 </head>
+<script>
+    function mostrarFormulario() {
+        const form = document.getElementById("formPublicar");
+        form.style.display = form.style.display === "none" ? "block" : "none";
+    }
+</script>
 
 <body>
 
@@ -223,29 +305,58 @@
             </div>
         </header>
         <main>
-            <div class="publicacion">
-                <div class="cabecera">
-                    <div class="fotoperfil"></div>
-                    <div>
-                        <div class="nombre-usuario">nombre_usuario</div>
-                    </div>
+            <div style="width:600px;">
+                <div id="formPublicar" style="display:none; margin-bottom:20px;">
+                    <form method="POST">
+                        <textarea name="contenido" required
+                            style="width:100%; height:100px; padding:10px; border-radius:8px; border:none;"></textarea>
+                        <button type="submit" name="publicar"
+                            style="margin-top:10px; padding:10px 15px; border:none; border-radius:8px; background:#f7c775; cursor:pointer;">
+                            <strong>Publicar</strong>
+                        </button>
+                    </form>
                 </div>
-                <div class="contenidop">
-                    AAAAAAA
-                </div>
-                <div class="imagen"></div>
-                <div class="acciones">
-                    <div class="boton-accion">Me gusta</div>
-                    <div class="boton-accion">Comentar</div>
-                    <div class="boton-accion">Compartir</div>
-                </div>
+
+                <?php if (!empty($posts)): ?>
+                    <?php foreach ($posts as $post): ?>
+                        <div class="publicacion" style="height:auto; margin-bottom:20px;">
+                            <div class="cabecera">
+                                <div class="fotoperfil"></div>
+                                <div>
+                                    <div class="nombre-usuario">
+                                        <?= htmlspecialchars($_SESSION['user_name'] ?? 'Usuario') ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="contenidop">
+                                <?= htmlspecialchars($post['contenido']) ?>
+                            </div>
+
+                            <div class="acciones">
+                                <form method="POST"
+                                    onsubmit="return confirm('¿Seguro que quieres eliminar esta publicación?');">
+                                    <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+                                    <button type="submit" name="eliminar" class="boton-eliminar">
+                                        Eliminar publicación
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p style="text-align:center; color:#b0b3b8;">
+                        No hay publicaciones todavía.
+                    </p>
+                <?php endif; ?>
+
             </div>
         </main>
         <aside class="opciones">
             <div class="perfil">
                 <div class="fotoperfil"></div>
                 <div style="margin-left:10px;">
-                    <strong>nombre_usuario</strong>
+                <strong><?= htmlspecialchars($_SESSION['user_name']) ?></strong>
                 </div>
             </div>
             <ul class="menu">
@@ -256,7 +367,9 @@
             </ul>
         </aside>
     </div>
-    <button class="botonpublicar">Publicar</button>
+    <button class="botonpublicar" onclick="mostrarFormulario()">
+        Publicar
+    </button>
 </body>
 
 </html>

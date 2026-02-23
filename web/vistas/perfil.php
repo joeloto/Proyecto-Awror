@@ -1,11 +1,89 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['id'])) {
+    header("Location: ../iniciosesion.php");
+    exit();
+}
+
+$mensaje = '';
+$id = $_SESSION['id'];
+
+$ch = curl_init("http://localhost:8080/apiawror/rest/users/$id");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+curl_close($ch);
+
+if ($status == 200) {
+    $usuario = json_decode($response, true);
+} else {
+    session_destroy();
+    header("Location: ../iniciosesion.php");
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
+
+    $update_data = [
+        'user_name'   => $_POST['user_name'],
+        'real_name'   => $_POST['real_name'],
+        'real_surname' => $_POST['real_surname'],
+        'email'       => $_POST['email'],
+        'password'    => $_POST['password'] 
+    ];
+
+    $ch = curl_init("http://localhost:8080/apiawror/rest/users/$id");
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($update_data));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+
+    $response = curl_exec($ch);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($status == 200) {
+        $mensaje = "Datos actualizados correctamente.";
+
+        $_SESSION['user_name'] = $_POST['user_name'];
+        $_SESSION['real_name'] = $_POST['real_name'];
+        $_SESSION['real_surname'] = $_POST['real_surname'];
+        $_SESSION['email'] = $_POST['email'];
+
+        header("Location: perfil.php");
+        exit();
+    } else {
+        $mensaje = "Error al actualizar.";
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['borrar'])) {
+
+    $ch = curl_init("http://localhost:8080/apiawror/rest/users/$id");
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    curl_exec($ch);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($status == 200) {
+        session_destroy();
+        header("Location: ../iniciosesion.php");
+        exit();
+    } else {
+        $mensaje = "Error al borrar cuenta.";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil</title>
-
+    <title>Perfil - AWROR</title>
     <style>
         * {
             margin: 0;
@@ -27,15 +105,12 @@
         }
 
         header {
-            grid-column: 1 / 3;
+            grid-column: 1/3;
             background-color: #242526;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 40px;
-            border-bottom: 1px solid #3a3b3c;
-            position: sticky;
-            top: 0;
         }
 
         .logo {
@@ -56,35 +131,84 @@
             transform: scale(1.05);
         }
 
-
-        .tituloapp a{
+        .tituloapp a {
             color: #f7c775;
             font-weight: bold;
             font-size: 25px;
             text-decoration: none;
         }
 
-        .tituloapp a:hover {
+        .tituloapp a:hover{
             color: white;
-            font-weight: bold;
-            font-size: 25px;
         }
 
         .main {
             padding: 40px;
             display: flex;
             justify-content: center;
-            overflow-y: auto;
         }
 
         .formulario {
             background-color: #242526;
             width: 600px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             padding: 20px;
             border: 1px solid #3a3b3c;
-            height: 660px;
+        }
+
+        .datos {
+            margin: 15px 0;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .acciones {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .boton-guardar {
+            background-color: #f7c775;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .boton-guardar:hover {
+            background-color: #ea9d55;
+        }
+
+        .boton-borrar {
+            background-color: #b02a37;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 15px;
+        }
+
+        .boton-borrar:hover {
+            background-color: #772222;
+        }
+
+        .mensaje {
+            color: green;
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: center;
         }
 
         .fotoperfil {
@@ -93,26 +217,6 @@
             border-radius: 50%;
             background-color: #3a3b3c;
             margin-right: 12px;
-        }
-
-        .nombre-usuario {
-            font-weight: 600;
-            color: #e4e6eb;
-        }
-
-        .datos {
-            margin: 15px 0;
-            font-size: 15px;
-            line-height: 1.5;
-            color: #d0d2d6;
-        }
-
-        .acciones {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 15px;
-            padding-top: 10px;
-            border-top: 1px solid #3a3b3c;
         }
 
         .opciones {
@@ -127,7 +231,7 @@
             margin-bottom: 30px;
         }
 
-        .perfil .foto-usuario {
+        .perfil .fotoperfil {
             width: 50px;
             height: 50px;
         }
@@ -158,23 +262,6 @@
         .menu li:hover {
             background-color: #3a3b3c;
         }
-
-        .boton-guardar {
-            background-color: #f7c775;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-size: 20px;
-            font-weight: bold;
-            margin-top: 15px;
-        }
-
-        .boton-guardar:hover {
-            background-color: #ea9d55;
-        }
     </style>
 </head>
 
@@ -182,52 +269,27 @@
 
     <div class="pagina">
         <header>
-            <div class="logo"><a href="./principal.php"><img src="../awrorlogo.png" width="50px" height="50px"></a></div>
-
-            <div class="tituloapp">
-                <a href="./principal.php">AWROR</a>
-            </div>
+            <div class="logo"><a href="./principal.php"><img src="../awrorlogo.png"></a></div>
+            <div class="tituloapp"><a href="./principal.php">AWROR</a></div>
         </header>
+
         <main class="main">
             <div class="formulario">
-
                 <h2 style="margin-bottom:20px; color:#f7c775;">Datos del Perfil</h2>
-
-                <form action="../controladores/controlador_actualizar.php" method="POST">
-
-                    <div class="datos">
-                        <label for="real_name">Nombre:</label><br><br>
-                        <input type="text" id="real_name" name="real_name"
-                            style="width:100%; padding:10px; border-radius:8px; border:none;">
-                    </div>
-                    <div class="datos">
-                        <label for="real_surname">Primer apellido:</label><br><br>
-                        <input type="text" id="real_surname" name="real_surname"
-                            style="width:100%; padding:10px; border-radius:8px; border:none;">
-                    </div>
-                    <div class="datos">
-                        <label for="email">Correo electrónico:</label><br><br>
-                        <input type="email" id="email" name="email"
-                            style="width:100%; padding:10px; border-radius:8px; border:none;">
-                    </div>
-                    <div class="datos">
-                        <label for="user_name">Nombre de usuario:</label><br><br>
-                        <input type="text" id="user_name" name="user_name"
-                            style="width:100%; padding:10px; border-radius:8px; border:none;">
-                    </div>
-                    <div class="datos">
-                        <label for="password">Contraseña:</label><br><br>
-                        <input type="password" id="password" name="password"
-                            style="width:100%; padding:10px; border-radius:8px; border:none;">
-                    </div>
+                <?php if ($mensaje): ?><div class="mensaje"><?= htmlspecialchars($mensaje) ?></div><?php endif; ?>
+                <form method="POST">
+                    <div class="datos"><label>Nombre:</label><br><br><input type="text" name="real_name" value="<?= htmlspecialchars($usuario['real_name']) ?>"></div>
+                    <div class="datos"><label>Primer apellido:</label><br><br><input type="text" name="real_surname" value="<?= htmlspecialchars($usuario['real_surname']) ?>"></div>
+                    <div class="datos"><label>Correo electrónico:</label><br><br><input type="email" name="email" value="<?= htmlspecialchars($usuario['email']) ?>"></div>
+                    <div class="datos"><label>Nombre de usuario:</label><br><br><input type="text" name="user_name" value="<?= htmlspecialchars($usuario['user_name']) ?>"></div>
+                    <div class="datos"><label>Contraseña:</label><br><br><input type="password" name="password" placeholder="Nueva contraseña"></div>
                     <div class="acciones">
-                        <button type="submit" class="boton-guardar">
-                            Guardar cambios
-                        </button>
+                        <button type="submit" name="guardar" class="boton-guardar">Guardar cambios</button>
+                        <button type="submit" name="borrar"
+                            onclick="return confirm('¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.')"
+                            class="boton-borrar">Borrar cuenta</button>
                     </div>
-
                 </form>
-
             </div>
         </main>
 
@@ -245,6 +307,7 @@
                 <li><a href="#">Calendario</a></li>
             </ul>
         </aside>
+
     </div>
 </body>
 

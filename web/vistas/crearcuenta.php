@@ -1,29 +1,40 @@
 <?php
-require_once '../modelos/modelo.php';
-
 $mensaje = '';
-if (
-    !empty($_POST['real_name']) &&
-    !empty($_POST['real_surname']) &&
-    !empty($_POST['email']) &&
-    !empty($_POST['password']) &&
-    !empty($_POST['user_name'])
-) {
-    $user = new User();
 
-    $rutaBD = null; 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $resultado = $user->setUsuario($_POST['real_name'], $_POST['real_surname'], $_POST['email'], $_POST['password'], $_POST['user_name'], $rutaBD);
+    $data = [
+        'user_name' => $_POST['user_name'] ?? '',
+        'real_name' => $_POST['real_name'] ?? '',
+        'real_surname' => $_POST['real_surname'] ?? '',
+        'email' => $_POST['email'] ?? '',
+        'password' => $_POST['password'] ?? ''
+    ];
 
-    if ($resultado) {
-        echo "<script>alert('Cuenta creada correctamente');</script>";
+    if (in_array('', $data)) {
+        $mensaje = "Rellena todos los campos.";
     } else {
-        echo "<script>alert('No se ha podido crear la cuenta');</script>";
+
+        $ch = curl_init("http://localhost:8080/apiawror/rest/users");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json'
+        ]);
+
+        $response = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($status == 200) {
+            $mensaje = "Cuenta creada correctamente. Ya puedes iniciar sesión.";
+        } else {
+            $mensaje = "Error al crear la cuenta.";
+        }
     }
 }
 ?>
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -185,6 +196,9 @@ if (
                 <input type="text" name="user_name" placeholder="Nombre de usuario" required>
             </div>
             <button type="submit">Crear cuenta</button>
+            <?php if($mensaje): ?>
+        <div class="mensaje"><?= htmlspecialchars($mensaje) ?></div>
+    <?php endif; ?>
         </form>
         <a href="../iniciosesion.php">¿Ya tienes cuenta? Inicia sesión</a>
     </div>
