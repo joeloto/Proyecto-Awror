@@ -1,8 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.AWROR" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.AWROR_DEF" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <item name="colorPrimary">#FFFF</item>
+        <item name="colorPrimary">#EA873C</item>
     </style>
-    <style name="Theme.AWROR" parent="Base.Theme.AWROR" />
+
+    <style name="Theme.AWROR_DEF" parent="Base.Theme.AWROR_DEF" />
 </resources>

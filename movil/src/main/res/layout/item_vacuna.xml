@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    android:padding="12dp"
+    android:elevation="4dp">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tvNombreVacuna"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nombre vacuna"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp"/>
+
+            <TextView
+                android:id="@+id/tvFechaVacuna"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Administrada: --/--/----"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:id="@+id/tvProximaVacuna"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Próxima: --/--/----"
+                android:textSize="14sp"
+                android:textColor="#666"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/btnEditarVacuna"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/lapiz"
+                app:tint="@android:color/holo_blue_dark"
+                android:padding="6dp"
+                android:layout_marginBottom="8dp"/>
+
+            <ImageView
+                android:id="@+id/btnEliminarVacuna"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/basura"
+                app:tint="@android:color/holo_red_dark"
+                android:padding="6dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

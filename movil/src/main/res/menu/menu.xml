@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
-        android:id="@+id/principal"
+        android:id="@+id/nav_inicio"
         android:icon="@drawable/hueso"
-        android:title="Principal"/>
+        android:title="Inicio"/>
 
     <item
-        android:id="@+id/publicar"
-        android:icon="@drawable/publicar"
-        android:title="Publicar"/>
+        android:id="@+id/nav_mascotas"
+        android:icon="@drawable/huella"
+        android:title="Mascotas"/>
 
     <item
-        android:id="@+id/perfil"
+        android:id="@+id/nav_vacunas"
+        android:icon="@drawable/jeringuilla"
+        android:title="Vacunas"/>
+
+    <item
+        android:id="@+id/nav_perfil"
         android:icon="@drawable/usuario"
         android:title="Perfil"/>
-    <item
-        android:id="@+id/veterinaria"
-        android:icon="@drawable/jeringuilla"
-        android:title="Veterinaria"/>
 
 </menu>
