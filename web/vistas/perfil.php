@@ -1,6 +1,12 @@
 <?php
 session_start();
 
+if (isset($_POST['logout'])) {
+    session_destroy();
+    header("Location: ../iniciosesion.php");
+    exit();
+}
+
 if (!isset($_SESSION['id'])) {
     header("Location: ../iniciosesion.php");
     exit();
@@ -12,6 +18,14 @@ $id = $_SESSION['id'];
 $ch = curl_init("http://localhost:8080/apiawror/rest/users/$id");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $response = curl_exec($ch);
+
+if ($response === false) {
+    curl_close($ch);
+    session_destroy();
+    header("Location: ../iniciosesion.php");
+    exit();
+}
+
 $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
@@ -26,12 +40,15 @@ if ($status == 200) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
 
     $update_data = [
-        'user_name'   => $_POST['user_name'],
-        'real_name'   => $_POST['real_name'],
-        'real_surname' => $_POST['real_surname'],
-        'email'       => $_POST['email'],
-        'password'    => $_POST['password'] 
+        'user_name'     => trim($_POST['user_name']),
+        'real_name'     => trim($_POST['real_name']),
+        'real_surname'  => trim($_POST['real_surname']),
+        'email'         => trim($_POST['email'])
     ];
+
+    if (!empty($_POST['password'])) {
+        $update_data['password'] = $_POST['password'];
+    }
 
     $ch = curl_init("http://localhost:8080/apiawror/rest/users/$id");
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
@@ -46,10 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
     if ($status == 200) {
         $mensaje = "Datos actualizados correctamente.";
 
-        $_SESSION['user_name'] = $_POST['user_name'];
-        $_SESSION['real_name'] = $_POST['real_name'];
-        $_SESSION['real_surname'] = $_POST['real_surname'];
-        $_SESSION['email'] = $_POST['email'];
+        $_SESSION['user_name'] = $update_data['user_name'];
+        $_SESSION['real_name'] = $update_data['real_name'];
+        $_SESSION['real_surname'] = $update_data['real_surname'];
+        $_SESSION['email'] = $update_data['email'];
 
         header("Location: perfil.php");
         exit();
@@ -84,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['borrar'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil - AWROR</title>
+
     <style>
         * {
             margin: 0;
@@ -102,6 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['borrar'])) {
             grid-template-columns: 1fr 320px;
             grid-template-rows: 70px 1fr;
             height: 100vh;
+            background-image: url('../fondoawror2.jpg');
         }
 
         header {
@@ -111,12 +130,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['borrar'])) {
             align-items: center;
             justify-content: space-between;
             padding: 0 40px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
         }
 
         .logo img {
@@ -138,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['borrar'])) {
             text-decoration: none;
         }
 
-        .tituloapp a:hover{
+        .tituloapp a:hover {
             color: white;
         }
 
@@ -174,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['borrar'])) {
         }
 
         .boton-guardar {
-            background-color: #f7c775;
+            background-color: #ea9d55;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -186,7 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['borrar'])) {
         }
 
         .boton-guardar:hover {
-            background-color: #ea9d55;
+            background-color: #f7c775;
         }
 
         .boton-borrar {
@@ -211,14 +224,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['borrar'])) {
             text-align: center;
         }
 
-        .fotoperfil {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background-color: #3a3b3c;
-            margin-right: 12px;
-        }
-
         .opciones {
             background-color: #242526;
             border-left: 1px solid #3a3b3c;
@@ -234,15 +239,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['borrar'])) {
         .perfil .fotoperfil {
             width: 50px;
             height: 50px;
+            border-radius: 50%;
+            background-color: #3a3b3c;
         }
 
         .menu {
             list-style: none;
             padding: 0;
-        }
-
-        .menu li {
-            margin-bottom: 5px;
         }
 
         .menu a {
@@ -258,10 +261,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['borrar'])) {
             background-color: #3a3b3c;
             color: #f7c775;
         }
-
-        .menu li:hover {
-            background-color: #3a3b3c;
-        }
     </style>
 </head>
 
@@ -276,15 +275,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['borrar'])) {
         <main class="main">
             <div class="formulario">
                 <h2 style="margin-bottom:20px; color:#f7c775;">Datos del Perfil</h2>
-                <?php if ($mensaje): ?><div class="mensaje"><?= htmlspecialchars($mensaje) ?></div><?php endif; ?>
+
+                <?php if ($mensaje): ?>
+                    <div class="mensaje"><?= htmlspecialchars($mensaje) ?></div>
+                <?php endif; ?>
+
                 <form method="POST">
-                    <div class="datos"><label>Nombre:</label><br><br><input type="text" name="real_name" value="<?= htmlspecialchars($usuario['real_name']) ?>"></div>
-                    <div class="datos"><label>Primer apellido:</label><br><br><input type="text" name="real_surname" value="<?= htmlspecialchars($usuario['real_surname']) ?>"></div>
-                    <div class="datos"><label>Correo electrónico:</label><br><br><input type="email" name="email" value="<?= htmlspecialchars($usuario['email']) ?>"></div>
-                    <div class="datos"><label>Nombre de usuario:</label><br><br><input type="text" name="user_name" value="<?= htmlspecialchars($usuario['user_name']) ?>"></div>
-                    <div class="datos"><label>Contraseña:</label><br><br><input type="password" name="password" placeholder="Nueva contraseña"></div>
+                    <div class="datos">
+                        <label>Nombre:</label><br><br>
+                        <input type="text" name="real_name" value="<?= htmlspecialchars($usuario['real_name']) ?>">
+                    </div>
+
+                    <div class="datos">
+                        <label>Primer apellido:</label><br><br>
+                        <input type="text" name="real_surname" value="<?= htmlspecialchars($usuario['real_surname']) ?>">
+                    </div>
+
+                    <div class="datos">
+                        <label>Correo electrónico:</label><br><br>
+                        <input type="email" name="email" value="<?= htmlspecialchars($usuario['email']) ?>">
+                    </div>
+
+                    <div class="datos">
+                        <label>Nombre de usuario:</label><br><br>
+                        <input type="text" name="user_name" value="<?= htmlspecialchars($usuario['user_name']) ?>">
+                    </div>
+
+                    <div class="datos">
+                        <label>Nueva contraseña (opcional):</label><br><br>
+                        <input type="password" name="password" placeholder="Nueva contraseña">
+                    </div>
+
                     <div class="acciones">
                         <button type="submit" name="guardar" class="boton-guardar">Guardar cambios</button>
+
                         <button type="submit" name="borrar"
                             onclick="return confirm('¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.')"
                             class="boton-borrar">Borrar cuenta</button>
@@ -295,17 +319,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['borrar'])) {
 
         <aside class="opciones">
             <div class="perfil">
-                <div class="fotoperfil"></div>
                 <div style="margin-left:10px;">
-                    <strong>nombre_usuario</strong>
+                    <strong><?= htmlspecialchars($_SESSION['user_name']) ?></strong>
                 </div>
             </div>
+
             <ul class="menu">
                 <li><a href="./perfil.php">Perfil</a></li>
-                <li><a href="#">Mascotas</a></li>
-                <li><a href="#">Historial de vacunas</a></li>
-                <li><a href="#">Calendario</a></li>
+                <li><a href="./mascotas.php">Mascotas</a></li>
+                <li><a href="./vacunas.php">Historial de vacunas</a></li>
             </ul>
+
+            <form method="POST" style="margin-top:20px;">
+                <button type="submit" name="logout" class="boton-borrar"
+                    style="width:100%; ">
+                    Cerrar sesión
+                </button>
+            </form>
+
         </aside>
 
     </div>

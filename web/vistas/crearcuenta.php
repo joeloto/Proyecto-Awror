@@ -1,18 +1,20 @@
 <?php
 $mensaje = '';
+$mensajeClase = ''; // <-- clase CSS dinámica
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $data = [
-        'user_name' => $_POST['user_name'] ?? '',
-        'real_name' => $_POST['real_name'] ?? '',
-        'real_surname' => $_POST['real_surname'] ?? '',
-        'email' => $_POST['email'] ?? '',
-        'password' => $_POST['password'] ?? ''
+        'user_name'     => trim($_POST['user_name'] ?? ''),
+        'real_name'     => trim($_POST['real_name'] ?? ''),
+        'real_surname'  => trim($_POST['real_surname'] ?? ''),
+        'email'         => strtolower(trim($_POST['email'] ?? '')),
+        'password'      => trim($_POST['password'] ?? '')
     ];
 
-    if (in_array('', $data)) {
+    if (in_array('', $data, true)) {
         $mensaje = "Rellena todos los campos.";
+        $mensajeClase = "error";
     } else {
 
         $ch = curl_init("http://localhost:8080/apiawror/rest/users");
@@ -24,185 +26,212 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         $response = curl_exec($ch);
-        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
 
-        if ($status == 200) {
-            $mensaje = "Cuenta creada correctamente. Ya puedes iniciar sesión.";
+        if ($response === false) {
+            $mensaje = "Error al conectar con el servidor.";
+            $mensajeClase = "error";
         } else {
-            $mensaje = "Error al crear la cuenta.";
+            $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if ($status == 200) {
+                $mensaje = "Cuenta creada correctamente. Ya puedes iniciar sesión.";
+                $mensajeClase = "exito";
+            } else if ($status == 409) {
+                $mensaje = "El correo ya está registrado. Prueba con otro.";
+                $mensajeClase = "error";
+            } else {
+                $mensaje = "Error al crear la cuenta.";
+                $mensajeClase = "error";
+            }
         }
+
+        curl_close($ch);
     }
 }
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crear Cuenta - AWROR</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cuenta - AWROR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 
-    body, html {
-        height: 100%;
-        font-family: 'Montserrat', sans-serif;
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .container {
-        display: flex;
-        width: 100vw;
-        height: 100vh;
-    }
+        body,
+        html {
+            height: 100%;
+            font-family: 'Montserrat', sans-serif;
+        }
 
-    .columnaIzquierda {
-        flex: 1;
-        background: url('https://www.infobae.com/new-resizer/AN9yqvBxbSsBDmcl_bAAV5KBzTY=/arc-anglerfish-arc2-prod-infobae/public/TJMNI2MPI5DCNH6IO45PAMBFEQ.jpg') center/cover no-repeat;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-    }
+        .container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
 
-    .columnaIzquierda .text {
-        position: relative;
-        z-index: 1;
-        text-align: center;
-        color: #fff;
-        padding: 20px;
-        text-shadow: -1px -1px 0 black,-1px -1px 0 black,-1px -1px 0 black,-1px -1px 0 black;
-    }
+        .columnaIzquierda {
+            flex: 1;
+            background: url('https://www.infobae.com/new-resizer/AN9yqvBxbSsBDmcl_bAAV5KBzTY=/arc-anglerfish-arc2-prod-infobae/public/TJMNI2MPI5DCNH6IO45PAMBFEQ.jpg') center/cover no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
 
-    .columnaIzquierda h1 {
-        font-size: 32px;
-        margin-bottom: 15px;
-    }
+        .columnaIzquierda .text {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: #fff;
+            padding: 20px;
+            text-shadow: -1px -1px 0 black, -1px -1px 0 black;
+        }
 
-    .columnaIzquierda p {
-        font-size: 25px;
-        line-height: 1.5;
-    }
+        .columnaIzquierda h1 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
 
-    .columnaDerecha {
-        flex: 1;
-        background-color: #fff8e1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 50px 40px;
-    }
+        .columnaIzquierda p {
+            font-size: 25px;
+            line-height: 1.5;
+        }
 
-    .columnaDerecha .logo {
-        width: 200px;
-    }
+        .columnaDerecha {
+            flex: 1;
+            background-color: #fff8e1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 40px;
+        }
 
-    .columnaDerecha h2 {
-        color: #8B4513;
-        margin-bottom: 10px;
-        font-size: 24px;
-    }
+        .columnaDerecha .logo {
+            width: 200px;
+        }
 
-    .columnaDerecha p {
-        color: #A0522D;
-        margin-bottom: 30px;
-        font-size: 14px;
-    }
+        .columnaDerecha h2 {
+            color: #8B4513;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
 
-    .formulario {
-        width: 100%;
-        margin-bottom: 15px;
-    }
+        .columnaDerecha p {
+            color: #A0522D;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
 
-    .formulario input {
-        width: 500px;
-        padding: 14px 15px;
-        border-radius: 12px;
-        border: 1px solid #D2B48C;
-        font-size: 14px;
-        transition: all 0.3s;
-    }
+        .formulario {
+            width: 100%;
+            margin-bottom: 15px;
+        }
 
-    .formulario input:focus {
-        border-color: #DAA520;
-        box-shadow: 0 0 8px rgba(218,165,32,0.5);
-        outline: none;
-    }
+        .formulario input {
+            width: 500px;
+            padding: 14px 15px;
+            border-radius: 12px;
+            border: 1px solid #D2B48C;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
 
-    button {
-        width: 100%;
-        padding: 14px;
-        font-size: 16px;
-        font-weight: 600;
-        color: #fff;
-        background-color: #DAA520; 
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        margin-top: 10px;
-    }
+        .formulario input:focus {
+            border-color: #DAA520;
+            box-shadow: 0 0 8px rgba(218, 165, 32, 0.5);
+            outline: none;
+        }
 
-    button:hover {
-        background-color: #B8860B;
-    }
+        button {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            background-color: #DAA520;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
 
-    .columnaDerecha a {
-        display: block;
-        margin-top: 15px;
-        font-size: 14px;
-        text-decoration: none;
-        color: #8B4513;
-    }
+        button:hover {
+            background-color: #B8860B;
+        }
 
-    .columnaDerecha a:hover {
-        color: #B8860B;
-    }
+        .columnaDerecha a {
+            display: block;
+            margin-top: 15px;
+            font-size: 14px;
+            text-decoration: none;
+            color: #8B4513;
+        }
 
-</style>
+        .columnaDerecha a:hover {
+            color: #B8860B;
+        }
+
+        .mensaje {
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .mensaje.exito {
+            color: green;
+        }
+
+        .mensaje.error {
+            color: red;
+        }
+    </style>
 </head>
+
 <body>
-<div class="container">
-    <div class="columnaIzquierda">
-        <div class="text">
-            <h1>La aplicación ideal de mascotas</h1>
-            <p>Comparte momentos inolvidables con tus queridos compañeros</p>
+    <div class="container">
+
+        <div class="columnaIzquierda">
+            <div class="text">
+                <h1>La aplicación ideal de mascotas</h1>
+                <p>Comparte momentos inolvidables con tus queridos compañeros</p>
+            </div>
         </div>
+
+        <div class="columnaDerecha">
+            <img src="../awrorlogo.png" class="logo" alt="Logo">
+            <h2>Crear cuenta en AWROR</h2>
+            <p>Conviértete en awrorer</p>
+
+            <form action="#" method="post">
+                <div class="formulario"><input type="text" name="real_name" placeholder="Nombre" required></div>
+                <div class="formulario"><input type="text" name="real_surname" placeholder="Apellido" required></div>
+                <div class="formulario"><input type="email" name="email" placeholder="Correo electrónico" required></div>
+                <div class="formulario"><input type="password" name="password" placeholder="Contraseña" required></div>
+                <div class="formulario"><input type="text" name="user_name" placeholder="Nombre de usuario" required></div>
+
+                <button type="submit">Crear cuenta</button>
+
+                <?php if ($mensaje): ?>
+                    <div class="mensaje <?= $mensajeClase ?>">
+                        <?= htmlspecialchars($mensaje) ?>
+                    </div>
+                <?php endif; ?>
+            </form>
+
+            <a href="../iniciosesion.php">¿Ya tienes cuenta? Inicia sesión</a>
+        </div>
+
     </div>
-
-    <div class="columnaDerecha">
-        <img src="../awrorlogo.png" class="logo" alt="Logo">
-        <h2>Crear cuenta en AWROR</h2>
-        <p>Conviértete en awrorer</p>
-
-        <form action="#" method="post">
-            <div class="formulario">
-                <input type="text" name="real_name" placeholder="Nombre" required>
-            </div>
-            <div class="formulario">
-                <input type="text" name="real_surname" placeholder="Apellido" required>
-            </div>
-            <div class="formulario">
-                <input type="email" name="email" placeholder="Correo electrónico" required>
-            </div>
-            <div class="formulario">
-                <input type="password" name="password" placeholder="Contraseña" required>
-            </div>
-            <div class="formulario">
-                <input type="text" name="user_name" placeholder="Nombre de usuario" required>
-            </div>
-            <button type="submit">Crear cuenta</button>
-            <?php if($mensaje): ?>
-        <div class="mensaje"><?= htmlspecialchars($mensaje) ?></div>
-    <?php endif; ?>
-        </form>
-        <a href="../iniciosesion.php">¿Ya tienes cuenta? Inicia sesión</a>
-    </div>
-</div>
-
 </body>
+
 </html>

@@ -9,29 +9,38 @@ if (!isset($_SESSION['id'])) {
 $usuario_id = $_SESSION['id'];
 $api = "http://localhost:8080/apiawror/rest/posts";
 
-/* -------- CREAR POST -------- */
 if (isset($_POST['publicar'])) {
 
-    $data = [
-        "user_id" => $usuario_id,
-        "contenido" => $_POST['contenido']
-    ];
+    $contenido = trim($_POST['contenido'] ?? '');
+    $imagenBase64 = null;
 
-    $ch = curl_init($api);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json'
-    ]);
-    curl_exec($ch);
-    curl_close($ch);
+    if (!empty($_FILES['imagen']['tmp_name'])) {
+        $imagen = file_get_contents($_FILES['imagen']['tmp_name']);
+        $imagenBase64 = base64_encode($imagen);
+    }
+
+    if ($contenido !== '' || $imagenBase64 !== null) {
+        $data = [
+            "user_id"   => $usuario_id,
+            "contenido" => $contenido,
+            "imagen"    => $imagenBase64
+        ];
+
+        $ch = curl_init($api);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json'
+        ]);
+        curl_exec($ch);
+        curl_close($ch);
+    }
 
     header("Location: principal.php");
     exit();
 }
 
-/* -------- ELIMINAR POST -------- */
 if (isset($_POST['eliminar'])) {
 
     $post_id = $_POST['post_id'];
@@ -46,13 +55,36 @@ if (isset($_POST['eliminar'])) {
     exit();
 }
 
-/* -------- OBTENER POSTS -------- */
-$ch = curl_init($api . "/user/" . $usuario_id);
+if (isset($_POST['editar'])) {
+    $post_id = $_POST['post_id'];
+    $contenido = trim($_POST['contenido_edit']);
+
+    $data = [
+        "user_id" => $usuario_id,
+        "contenido" => $contenido
+    ];
+
+    $ch = curl_init($api . "/" . $post_id);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    curl_exec($ch);
+    curl_close($ch);
+
+    header("Location: principal.php");
+    exit();
+}
+
+$ch = curl_init($api);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $response = curl_exec($ch);
 curl_close($ch);
 
 $posts = json_decode($response, true);
+if (!is_array($posts)) {
+    $posts = [];
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -94,12 +126,6 @@ $posts = json_decode($response, true);
             top: 0;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-        }
-
         .logo img {
             width: 50px;
             height: 50px;
@@ -112,7 +138,6 @@ $posts = json_decode($response, true);
             transform: scale(1.05);
         }
 
-
         .tituloapp a {
             color: #f7c775;
             font-weight: bold;
@@ -122,8 +147,6 @@ $posts = json_decode($response, true);
 
         .tituloapp a:hover {
             color: white;
-            font-weight: bold;
-            font-size: 25px;
         }
 
         main {
@@ -131,17 +154,16 @@ $posts = json_decode($response, true);
             display: flex;
             justify-content: center;
             overflow-y: auto;
+            background-image: url('../fondoawror2.jpg');
         }
 
         .publicacion {
-            background-color: #242526;
+            background-color: white;
             width: 600px;
-            height: 485px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             padding: 20px;
             border: 1px solid #3a3b3c;
-            /* display: none; */
         }
 
         .cabecera {
@@ -150,50 +172,65 @@ $posts = json_decode($response, true);
             margin-bottom: 15px;
         }
 
-        .fotoperfil {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background-color: #3a3b3c;
-            margin-right: 12px;
-        }
-
         .nombre-usuario {
             font-weight: 600;
-            color: #e4e6eb;
+            color: black;
         }
 
         .contenidop {
             margin: 15px 0;
             font-size: 15px;
             line-height: 1.5;
-            color: #d0d2d6;
+            color: black;
+            white-space: pre-wrap;
         }
 
         .imagen {
             width: 100%;
-            height: 300px;
-            background-color: #3a3b3c;
+            max-height: 300px;
+            object-fit: cover;
             border-radius: 10px;
+            margin-top: 10px;
         }
 
         .acciones {
             display: flex;
-            justify-content: space-around;
+            justify-content: flex-end;
             margin-top: 15px;
             padding-top: 10px;
             border-top: 1px solid #3a3b3c;
         }
 
-        .boton-accion {
+        .boton-eliminar {
+            background-color: #b02a37;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
             cursor: pointer;
-            color: #b0b3b8;
-            font-weight: 500;
+            font-weight: 600;
             transition: 0.2s;
         }
 
-        .boton-accion:hover {
-            color: #f7c775;
+        .boton-eliminar:hover {
+            background-color: #e03141;
+            transform: scale(1.05);
+        }
+
+        .boton-editar {
+            background-color: #0F748F;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .boton-editar:hover {
+            background-color: #1CBCE8;
+            transform: scale(1.05);
         }
 
         .opciones {
@@ -218,10 +255,6 @@ $posts = json_decode($response, true);
             padding: 0;
         }
 
-        .menu li {
-            margin-bottom: 5px;
-        }
-
         .menu a {
             display: block;
             padding: 12px 10px;
@@ -236,10 +269,6 @@ $posts = json_decode($response, true);
             color: #f7c775;
         }
 
-        .menu li:hover {
-            background-color: #3a3b3c;
-        }
-
         .botonpublicar {
             position: fixed;
             bottom: 30px;
@@ -248,49 +277,46 @@ $posts = json_decode($response, true);
             height: 60px;
             border-radius: 10px;
             border: none;
-            background-color: #f7c775;
+            background-color: #ea9d55;
             color: white;
             font-size: 20px;
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            display: inline-block;
-            line-height: 60px;
-            text-align: center;
-            vertical-align: middle;
             transition: background-color 0.3s, transform 0.2s;
         }
 
         .botonpublicar:hover {
-            background-color: #ea9d55;
+            background-color: #f7c760;
             transform: scale(1.1);
         }
 
-        .boton-eliminar {
-            background-color: #b02a37;
-            color: white;
+        .btn-publicar {
+            margin-top: 5px;
+            padding: 10px 15px;
             border: none;
-            padding: 8px 14px;
             border-radius: 8px;
+            background: #ea9d55;
             cursor: pointer;
-            font-weight: 600;
-            transition: 0.2s;
+            color: white;
         }
 
-        .boton-eliminar:hover {
-            background-color: #e03141;
-            transform: scale(1.05);
-        }
-
-        .boton-eliminar:active {
-            transform: scale(0.95);
+        .btn-publicar:hover {
+            background-color: #f7c760;
+            transform: scale(1.1);
         }
     </style>
 </head>
+
 <script>
     function mostrarFormulario() {
         const form = document.getElementById("formPublicar");
         form.style.display = form.style.display === "none" ? "block" : "none";
+    }
+
+    function mostrarEditar(id) {
+        const box = document.getElementById("editar" + id);
+        box.style.display = box.style.display === "none" ? "block" : "none";
     }
 </script>
 
@@ -298,20 +324,23 @@ $posts = json_decode($response, true);
 
     <div class="pagina">
         <header>
-            <div class="logo"><a href="./principal.php"><img src="../awrorlogo.png" width="50px" height="50px"></a></div>
-
-            <div class="tituloapp">
-                <a href="./principal.php">AWROR</a>
-            </div>
+            <div class="logo"><a href="./principal.php"><img src="../awrorlogo.png"></a></div>
+            <div class="tituloapp"><a href="./principal.php">AWROR</a></div>
         </header>
+
         <main>
             <div style="width:600px;">
+
                 <div id="formPublicar" style="display:none; margin-bottom:20px;">
-                    <form method="POST">
+                    <form method="POST" enctype="multipart/form-data">
                         <textarea name="contenido" required
-                            style="width:100%; height:100px; padding:10px; border-radius:8px; border:none;"></textarea>
-                        <button type="submit" name="publicar"
-                            style="margin-top:10px; padding:10px 15px; border:none; border-radius:8px; background:#f7c775; cursor:pointer;">
+                            style="width:100%; height:100px; padding:10px; border-radius:8px; border:none; resize:vertical;"
+                            placeholder="¿Qué quieres compartir hoy?"></textarea>
+
+                        <input type="file" name="imagen" accept="image/*"
+                            style="margin-top:10px; margin-bottom:10px; color:#e4e6eb;">
+
+                        <button type="submit" name="publicar" class="btn-publicar">
                             <strong>Publicar</strong>
                         </button>
                     </form>
@@ -319,57 +348,80 @@ $posts = json_decode($response, true);
 
                 <?php if (!empty($posts)): ?>
                     <?php foreach ($posts as $post): ?>
-                        <div class="publicacion" style="height:auto; margin-bottom:20px;">
+                        <div class="publicacion" style="margin-bottom:20px;">
                             <div class="cabecera">
-                                <div class="fotoperfil"></div>
-                                <div>
-                                    <div class="nombre-usuario">
-                                        <?= htmlspecialchars($_SESSION['user_name'] ?? 'Usuario') ?>
-                                    </div>
+                                <div class="nombre-usuario">
+                                    <?= htmlspecialchars($post['username'] ?? $_SESSION['user_name']) ?>
                                 </div>
                             </div>
 
-                            <div class="contenidop">
-                                <?= htmlspecialchars($post['contenido']) ?>
-                            </div>
+                            <?php if (!empty($post['contenido'])): ?>
+                                <div class="contenidop"><?= nl2br(htmlspecialchars($post['contenido'])) ?></div>
+                            <?php endif; ?>
+
+                            <?php if (!empty($post['imagen'])): ?>
+                                <img src="data:image/jpeg;base64,<?= $post['imagen'] ?>" class="imagen">
+                            <?php endif; ?>
 
                             <div class="acciones">
-                                <form method="POST"
-                                    onsubmit="return confirm('¿Seguro que quieres eliminar esta publicación?');">
+
+                                <?php if ($post['user_id'] == $usuario_id): ?>
+                                    <button type="button" class="boton-editar" onclick="mostrarEditar(<?= $post['id'] ?>)">Editar</button>
+
+                                    <form method="POST" style="margin-left:10px;"
+                                        onsubmit="return confirm('¿Seguro que quieres eliminar esta publicación?');">
+                                        <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+                                        <button type="submit" name="eliminar" class="boton-eliminar">Eliminar</button>
+                                    </form>
+                                <?php endif; ?>
+
+                            </div>
+
+                            <?php if ($post['user_id'] == $usuario_id): ?>
+                                <div id="editar<?= $post['id'] ?>" style="display:none; margin-top:10px;">
+                                    <form method="POST">
+                                        <textarea name="contenido_edit" style="width:100%; height:80px; border-radius:8px; padding:10px;"><?= htmlspecialchars($post['contenido']) ?></textarea>
+                                        <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+                                        <button type="submit" name="editar" class="boton-eliminar" style="background:#f7c775; color:black; margin-top:5px;">Guardar cambios</button>
+                                    </form>
+                                </div>
+                            <?php endif; ?>
+
+
+                            <div id="editar<?= $post['id'] ?>" style="display:none; margin-top:10px;">
+                                <form method="POST">
+                                    <textarea name="contenido_edit" style="width:100%; height:80px; border-radius:8px; padding:10px;"><?= htmlspecialchars($post['contenido']) ?></textarea>
                                     <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
-                                    <button type="submit" name="eliminar" class="boton-eliminar">
-                                        Eliminar publicación
-                                    </button>
+                                    <button type="submit" name="editar" class="boton-eliminar" style="background:#f7c775; color:black; margin-top:5px;">Guardar cambios</button>
                                 </form>
                             </div>
+
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <p style="text-align:center; color:#b0b3b8;">
-                        No hay publicaciones todavía.
-                    </p>
+                    <p style="text-align:center; color:#b0b3b8;">No hay publicaciones todavía.</p>
                 <?php endif; ?>
 
             </div>
         </main>
+
         <aside class="opciones">
             <div class="perfil">
-                <div class="fotoperfil"></div>
                 <div style="margin-left:10px;">
-                <strong><?= htmlspecialchars($_SESSION['user_name']) ?></strong>
+                    <strong><?= htmlspecialchars($_SESSION['user_name']) ?></strong>
                 </div>
             </div>
+
             <ul class="menu">
                 <li><a href="./perfil.php">Perfil</a></li>
-                <li><a href="#">Mascotas</a></li>
-                <li><a href="#">Historial de vacunas</a></li>
-                <li><a href="#">Calendario</a></li>
+                <li><a href="./mascotas.php">Mascotas</a></li>
+                <li><a href="./vacunas.php">Historial de vacunas</a></li>
             </ul>
         </aside>
     </div>
-    <button class="botonpublicar" onclick="mostrarFormulario()">
-        Publicar
-    </button>
+
+    <button class="botonpublicar" onclick="mostrarFormulario()">Publicar</button>
+
 </body>
 
 </html>

@@ -4,10 +4,10 @@ $mensaje = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $email = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? '';
+    $email = trim($_POST['email'] ?? '');
+    $password = trim($_POST['password'] ?? '');
 
-    if (empty($email) || empty($password)) {
+    if ($email === '' || $password === '') {
         $mensaje = "Rellena todos los campos.";
     } else {
 
@@ -25,26 +25,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         $response = curl_exec($ch);
-        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
 
-        if ($status == 200) {
-
-            $usuario = json_decode($response, true);
-            
-            $_SESSION['id'] = $usuario['id'];
-            $_SESSION['user_name'] = $usuario['user_name'];
-            $_SESSION['real_name'] = $usuario['real_name'];
-            $_SESSION['real_surname'] = $usuario['real_surname'];
-            $_SESSION['email'] = $usuario['email'];
-            $_SESSION['password'] = $usuario['password'];
-
-            header("Location: ./vistas/principal.php");
-            exit();
-
+        if ($response === false) {
+            $mensaje = "Error al conectar con el servidor.";
         } else {
-            $mensaje = "Correo o contraseña incorrectos.";
+            $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if ($status == 200) {
+                $usuario = json_decode($response, true);
+
+                $_SESSION['id'] = $usuario['id'];
+                $_SESSION['user_name'] = $usuario['user_name'];
+                $_SESSION['real_name'] = $usuario['real_name'];
+                $_SESSION['real_surname'] = $usuario['real_surname'];
+                $_SESSION['email'] = $usuario['email'];
+
+                curl_close($ch);
+                header("Location: ./vistas/principal.php");
+                exit();
+            } else {
+                $mensaje = "Correo o contraseña incorrectos.";
+            }
         }
+
+        curl_close($ch);
     }
 }
 ?>
@@ -135,6 +139,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .formulario a:hover {
             text-decoration: underline;
         }
+
+        .mensaje {
+            margin-top: 15px;
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -145,14 +155,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <h1>Bienvenido a AWROR</h1>
         <p>Inicia sesión en tu cuenta</p>
+
         <form method="post">
             <input type="email" name="email" placeholder="Correo electrónico" required>
             <input type="password" name="password" placeholder="Contraseña" required>
             <button type="submit">Acceder</button>
+
             <?php if ($mensaje): ?>
                 <div class="mensaje"><?= htmlspecialchars($mensaje) ?></div>
             <?php endif; ?>
         </form>
+
         <a href="./vistas/crearcuenta.php">¿No tienes cuenta? Crear cuenta</a>
     </div>
 
@@ -174,4 +187,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </script>
 
 </body>
+
 </html>
