@@ -12,9 +12,9 @@ namespace AWROR
 {
     public partial class MascotaDialog : Form
     {
-        public string Nombre { get; private set; }
-        public string Tipo { get; private set; }
-        public Image ImagenSeleccionada { get; private set; }
+        public string Nombre { get; set; }
+        public string Tipo { get; set; }
+        public Image ImagenSeleccionada { get; set; }
 
         public MascotaDialog()
         {
