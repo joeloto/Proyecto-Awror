@@ -25,7 +25,6 @@ namespace AWROR
         public VacunaDialog(string nombre, DateTime fechaAdmin, DateTime fechaProx, string notes)
         {
             InitializeComponent();
-
             txtNombre.Text = nombre;
             dtpFechaAdmin.Value = fechaAdmin;
             dtpFechaProxima.Value = fechaProx;
