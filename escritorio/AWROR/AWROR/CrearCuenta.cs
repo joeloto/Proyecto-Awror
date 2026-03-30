@@ -16,13 +16,17 @@ namespace AWROR
         private void txtEmail_Enter(object sender, EventArgs e)
         {
             if (txtEmail.Text == "Correo electrónico")
+            {
                 txtEmail.Text = "";
+            }
         }
 
         private void txtEmail_Leave(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtEmail.Text))
+            {
                 txtEmail.Text = "Correo electrónico";
+            }
         }
 
         private void txtPassword_Enter(object sender, EventArgs e)
@@ -46,37 +50,49 @@ namespace AWROR
         private void txtNombre_Enter(object sender, EventArgs e)
         {
             if (txtNombre.Text == "Nombre")
+            {
                 txtNombre.Text = "";
+            }
         }
 
         private void txtNombre_Leave(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtNombre.Text))
+            {
                 txtNombre.Text = "Nombre";
+            }
         }
 
         private void txtApellido_Enter(object sender, EventArgs e)
         {
             if (txtApellido.Text == "Primer apellido")
+            {
                 txtApellido.Text = "";
+            }
         }
 
         private void txtApellido_Leave(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtApellido.Text))
+            {
                 txtApellido.Text = "Primer apellido";
+            }
         }
 
         private void txtNombreUsuario_Enter(object sender, EventArgs e)
         {
             if (txtNombreUsuario.Text == "Nombre de usuario")
+            {
                 txtNombreUsuario.Text = "";
+            }
         }
 
         private void txtNombreUsuario_Leave(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtNombreUsuario.Text))
+            {
                 txtNombreUsuario.Text = "Nombre de usuario";
+            }
         }
 
         private void btnYaTengoCuenta_Click(object sender, EventArgs e)
