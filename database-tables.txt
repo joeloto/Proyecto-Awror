@@ -1,0 +1,50 @@
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `real_name` varchar(255) NOT NULL,
+  `real_surname` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `user_name` varchar(255) NOT NULL,
+  `created` date NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+
+
+CREATE TABLE `pets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `image` longblob DEFAULT NULL,
+  `date` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_date` (`date`),
+  CONSTRAINT `pets_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+
+
+CREATE TABLE `posts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `contenido` text NOT NULL,
+  `fecha` datetime DEFAULT current_timestamp(),
+  `imagen` longblob DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+
+
+CREATE TABLE `vaccines` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pet_id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `date_given` date NOT NULL,
+  `next_date` date DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pet_id` (`pet_id`),
+  CONSTRAINT `vaccines_ibfk_1` FOREIGN KEY (`pet_id`) REFERENCES `pets` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
