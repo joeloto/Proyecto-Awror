@@ -26,23 +26,23 @@ namespace AWROR
 
         private void btnPerfil_Click(object sender, EventArgs e)
         {
-            Perfil perfil = new Perfil();
-            perfil.Show();
+            Perfil p = new Perfil();
+            p.Show();
             this.Hide();
         }
 
         private void btnMascotas_Click(object sender, EventArgs e)
         {
-            Mascotas mascotas = new Mascotas();
-            mascotas.Show();
+            Mascotas m = new Mascotas();
+            m.Show();
             this.Hide();
         }
 
 
         private void btnVacunas_Click(object sender, EventArgs e)
         {
-            Vacunas vacunas = new Vacunas();
-            vacunas.Show();
+            Vacunas v = new Vacunas();
+            v.Show();
             this.Hide();
         }
 
