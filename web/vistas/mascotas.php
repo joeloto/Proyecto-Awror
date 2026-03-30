@@ -321,6 +321,65 @@ if (!is_array($pets)) $pets = [];
             background-color: #f7c760;
             transform: scale(1.1);
         }
+
+        .form-mascota {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .form-card {
+            background: #242526;
+            padding: 25px;
+            width: 350px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            color: #e4e6eb;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .form-card h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #b0b3b8;
+        }
+
+        .input-group input[type="text"],
+        .input-group input[type="file"] {
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            background: #3a3b3c;
+            color: #e4e6eb;
+        }
+
+        .btn-crear {
+            width: 100%;
+            padding: 12px;
+            background: #1877f2;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-crear:hover {
+            background: #0f5ec7;
+        }
     </style>
     <script>
         function toggleForm() {
@@ -344,14 +403,29 @@ if (!is_array($pets)) $pets = [];
 
         <main>
             <div class="contenido">
-                <div id="formMascota" style="display:none;">
-                    <form method="POST" enctype="multipart/form-data">
-                        <input type="text" name="name" placeholder="Nombre de la mascota" required>
-                        <input type="text" name="type" placeholder="Tipo de animal (Perro, Gato...)" required>
-                        <input type="file" name="image" accept="image/*">
-                        <button type="submit" name="crear">Añadir mascota</button>
+                <div id="formMascota" class="form-mascota" style="display:none;">
+                    <form method="POST" enctype="multipart/form-data" class="form-card">
+                        <h2>Añadir mascota</h2>
+
+                        <div class="input-group">
+                            <label>Nombre</label>
+                            <input type="text" name="name" placeholder="Ej: Rocky" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Tipo de animal</label>
+                            <input type="text" name="type" placeholder="Araña, Perro, Gato..." required>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Foto</label>
+                            <input type="file" name="image" accept="image/*">
+                        </div>
+
+                        <button type="submit" name="crear" class="btn-crear">Añadir mascota</button>
                     </form>
                 </div>
+
 
                 <div class="lista-mascotas">
                     <?php foreach ($pets as $pet): ?>

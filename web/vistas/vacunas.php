@@ -296,11 +296,16 @@ if (isset($_POST['eliminar'])) {
             height: 60px;
             border-radius: 10px;
             border: none;
-            background: #f7c775;
+            background: #ea9d55;
             color: white;
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
+        }
+
+        .botonvacuna:hover{
+            background-color: #f7c760;
+            transform: scale(1.1);
         }
     </style>
     <script>
