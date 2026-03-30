@@ -7,8 +7,6 @@
     android:background="@drawable/fondo2"
     android:padding="24dp">
 
-    <!-- 🔥 CREAMOS UNA CADENA VERTICAL PARA CENTRAR LOS EDITTEXT -->
-
     <EditText
         android:id="@+id/etNombrePerfil"
         android:layout_width="0dp"
@@ -70,9 +68,6 @@
         app:layout_constraintBottom_toTopOf="@id/layoutBotones"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-
-    <!-- 🔥 BOTONES ABAJO DEL TODO -->
 
     <LinearLayout
         android:id="@+id/layoutBotones"
