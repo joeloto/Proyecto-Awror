@@ -121,7 +121,6 @@ namespace AWROR
                     if (response.IsSuccessStatusCode)
                     {
                         MessageBox.Show("Cuenta eliminada correctamente");
-
                         IniciarSesion i = new IniciarSesion();
                         i.Show();
                         this.Close();
