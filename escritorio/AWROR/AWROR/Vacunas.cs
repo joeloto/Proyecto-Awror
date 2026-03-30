@@ -44,25 +44,29 @@ namespace AWROR
 
         private void btnPerfil_Click(object sender, EventArgs e)
         {
-            new Perfil().Show();
+            Perfil p = new Perfil();
+            p.Show();
             this.Hide();
         }
 
         private void btnMascotas_Click(object sender, EventArgs e)
         {
-            new Mascotas().Show();
+            Mascotas m = new Mascotas();
+            m.show();
             this.Hide();
         }
 
         private void btnVacunas_Click(object sender, EventArgs e)
         {
-            new Vacunas().Show();
+            Vacunas v = new Vacunas();
+            v.Show();
             this.Hide();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            new Principal().Show();
+            Principal p = new Principal();
+            p.Show();
             this.Hide();
         }
 
@@ -240,9 +244,7 @@ namespace AWROR
                     if (response.IsSuccessStatusCode)
                     {
                         List<Vacuna> vacunas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Vacuna>>(json);
-
                         flowLayoutPanelVacunas.Controls.Clear();
-
                         foreach (var v in vacunas)
                         {
                             CrearTarjetaVacuna(v);
